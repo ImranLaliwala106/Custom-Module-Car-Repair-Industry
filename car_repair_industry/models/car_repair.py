@@ -226,10 +226,7 @@ class CarRepairDetails(models.Model):
         current_company_id = self.env.user.company_id.id
         reminder_mails = datetime.now() - timedelta(days=90)
         records = self.env['car.repair.industry'].search([('company_id', '=', current_company_id), ('status', '=', 'done'), ('to_date', '=', reminder_mails.strftime('%Y-%m-%d'))])
-        print(records)
         if records:
-            for rec in records:
-                print(rec.to_date)
             template_id = self.env.ref('car_repair_industry.car_repair_reminder_mail')
             if template_id:
                 current_company_users = self.env['res.users'].search([('company_id', '=', current_company_id)])
