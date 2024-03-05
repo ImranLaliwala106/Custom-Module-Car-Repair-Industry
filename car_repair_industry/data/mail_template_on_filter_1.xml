@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <record id="email_template_filter_car_repair_new" model="mail.template">
+            <field name="name">Car Repair Filter: Send Email</field>
+            <field name="model_id" ref="car_repair_industry.model_car_repair_industry"/>
+            <field name="email_from">{{ object.login_company.email }}</field>
+            <field name="subject">QUOTATION EMAIL BASED ON DATES</field>
+            <field name="email_to">{{object.email}}
+            </field>
+            <field name="description">Quaotation email based on dates</field>
+            <field name="body_html" type="html">
+                <p>
+                    Subject
+                </p>
+            </field>
+        </record>    
+
+    </data>
+</odoo>

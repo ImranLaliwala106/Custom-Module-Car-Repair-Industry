@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_car_repair_industry,car.repair.industry,model_car_repair_industry,base.group_user,1,1,1,1
+access_custom_excel_class,custom.excel.class,model_custom_excel_class,base.group_user,1,1,1,1
+
+access_car_repair_industry_wizard,car.repair.industry.wizard,model_car_repair_industry_wizard,base.group_user,1,1,1,1
+access_car_repair_custom_excel,car.repair.custom.excel,model_car_repair_custom_excel,base.group_user,1,1,1,1
+
+access_client_group,car.repair.industry,model_car_repair_industry,client_group,1,0,0,0
+access_mechanics_group,car.repair.industry,model_car_repair_industry,mechanics_group,1,1,1,0
+access_owners_group,car.repair.industry,model_car_repair_industry,owners_group,1,1,1,1
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <record id="car_repair_schedule_action" model="ir.cron">
+            <field name="name">Reminder Mail For Service</field>
+            <field name="model_id" ref="model_car_repair_industry"/>
+            <field name="state">code</field>
+            <field name="code">model.action_done()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="nextcall" eval="DateTime.now().replace(hour=0, minute=1, second=0)"/>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+        </record>
+     </data>
+
+</odoo>

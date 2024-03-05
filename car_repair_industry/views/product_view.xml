@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <data>
+
+    <record id="car_repair_product_view_id" model="ir.ui.view">
+        <field name="name">car.repair.product.view.id</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options']" position="inside">
+                <span>
+                    <field name="choose_to_add"/>
+                    <label for="choose_to_add"/>
+                </span>
+            </xpath>
+    
+            <xpath expr="//group[@name='group_standard_price']" position="inside">    
+                <field name="add_product" invisible=" choose_to_add == False"/>
+            </xpath>
+        </field>
+    </record>
+        
+    </data>
+    
+
+</odoo>

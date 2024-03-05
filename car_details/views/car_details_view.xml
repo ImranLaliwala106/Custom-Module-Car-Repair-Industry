@@ -1,0 +1,90 @@
+<odoo>
+    <data>
+        <record id="car_details_list_view_id" model="ir.ui.view">
+            <field name="name">car.details.list.view.id</field>
+            <field name="model">car.details.model</field>
+            <field name="arch" type="xml">
+                <tree string="Car Details List">
+                    <field name="car"></field>
+                    <field name="license_plate"></field>
+                    <field name="car_model"></field>
+                    <field name="chassis_number"></field>
+                    <field name="fuel_type"></field>
+                    <field name="manufacturing_year"></field>
+                    <field name="under_guaranteed" widget="radio"></field>
+                    <field name="nature_service"></field>
+                    <field name="cost_total" string="Total Cost" sum="Total Cost"></field>
+                </tree> 
+            </field>
+        </record>
+
+        <record id="car_details_form_view_id" model="ir.ui.view">
+            <field name="name">car.details.form.view.id</field>
+            <field name="model">car.details.model</field>
+            <field name="arch" type="xml">
+                <form string="Car Details Form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="car"></field>
+                                <field name="license_plate"></field>
+                                <field name="car_model"></field>
+                                <field name="chassis_number"></field>
+                                <field name="fuel_type"></field>
+                                <field name="manufacturing_year"></field>
+                                <field name="under_guaranteed" widget="radio"></field>
+                            </group>
+                            <group>
+                                <field name="nature_service"></field>
+                                <field name="service_charge"></field>
+                                <field name="oil_price"></field>
+                                <field name="washing_charge"></field>
+                                <field name="cost_total"></field>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="car_details_model_view_pivot_id" model="ir.ui.view">
+            <field name="name">car.details.model.view.pivot.id</field>
+            <field name="model">car.details.model</field>
+            <field name="arch" type="xml">
+                <pivot string="Car Details Pivot" disable_linking="true">
+                    <field name="license_plate" type="row"/>
+                    <field name="service_charge" type="col"/>
+                    <field name="oil_price" type="col"/>
+                    <field name="washing_charge" type="col"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="car_details_model_view_graph_id" model="ir.ui.view">
+            <field name="name">car_details_model_view_graph_id</field>
+            <field name="model">car.details.model</field>
+            <field name="arch" type="xml">
+                <graph string="Car Details graph">
+                    <field name="car" type="row"></field>
+                    <field name="car_model"></field>
+                </graph>
+            </field>
+        </record>
+
+        <record id="car_details_action_id" model="ir.actions.act_window">
+            <field name="name">Car Details</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">car.details.model</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">
+                    No records to show
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="car_details_main_menu_id" name="Car Details"></menuitem>
+        <menuitem id="car_details_sub_menu_id" name="Car Details" parent="car_details_main_menu_id" action="car_details_action_id"></menuitem>
+
+    </data>
+</odoo>

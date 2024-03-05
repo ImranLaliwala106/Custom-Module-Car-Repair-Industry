@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="car_repair_wizard_id" model="ir.ui.view">
+            <field name="name">car.repair.wizard.id</field>
+            <field name="model">car.repair.industry.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Car Repair Form">
+                    <sheet>
+                        <group>
+                            <group >
+                                <field name="start_date"></field>
+                            </group>
+                            <group >
+                                <field name="end_date"></field>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="print_records" string="Print PDF" type="object" class="btn-primary"></button>
+                        <button name="print_excel" string="Print XLXS" type="object" class="btn-primary"></button>
+                        <button string="Cancel" class="btn-secondary" special="cancel"></button>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="car_repair_wizard_action_id" model="ir.actions.act_window">
+            <field name="name">Print Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">car.repair.industry.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="car_repair_industry.model_car_repair_industry"></field> 
+        </record>
+
+    </data>
+    
+</odoo>

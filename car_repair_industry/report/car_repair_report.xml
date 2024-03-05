@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_report_car_repair" model="ir.actions.report">
+            <field name="name">Car Repair Report</field>
+            <field name="model">car.repair.industry</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">car_repair_industry.report_car_repair</field>
+            <field name="report_file">car_repair_industry.report_car_repair</field>
+            <field name="binding_model_id" ref="model_car_repair_industry"/>
+            <field name="binding_type">report</field>
+        </record> 
+        
+        <template id="report_car_repair">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+
+                            <center>
+                                <h2>Car Repair Industry</h2>
+
+                                <table style="width:90%">
+                                    <tr style="width:90%; background-color:grey;">
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                    </tr>
+                                    <tr style="width:90%">
+                                        <td>
+                                            <center><p t-field="o.date_reciept"></p></center>
+                                        </td>
+                                        <td>
+                                            <center><p t-field="o.to_date"></p></center>
+                                        </td>
+                                    </tr>
+                                </table>
+                            
+                                <h5 style="margin-top:10px; margin-left:10px;">Client Info</h5>
+
+                                <table style="width:90%">
+                                    <tr style="width:90%; background-color:grey;">
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Company</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td><center><p t-field="o.client_name"></p></center></td>
+                                        <td><center><p t-field="o.contact_number"></p></center></td>
+                                        <td><center><p t-field="o.email"></p></center></td>
+                                        <td><center><p t-field="o.login_company"></p></center></td>
+                                    </tr>
+                                </table>
+                            
+
+                                <h5 style="margin-top:10px; margin-left:10px;">Quotation</h5>
+
+                            
+                                <table style="width:90%">
+                                    <tr style="width:90%; background-color:grey;">
+                                        <th>Model</th>
+                                        <th>Manufacturing Year</th>
+                                        <th>Service Charge</th>
+                                        <th>Oil Price</th>
+                                        <th>Washing Charge</th>
+                                        <th>Total</th>
+                                    </tr>
+
+                                    <t t-set="total_sum" t-value="0.0"/>
+                                    <t t-foreach="o.car_details_ids" t-as="c">
+
+                                        <tr>
+                                            <td><center><p t-esc="c.car_model"></p></center></td>
+                                            <td><center><p t-esc="c.manufacturing_year"></p></center></td>
+                                            <td><center><p t-esc="c.service_charge"></p></center></td>
+                                            <td><center><p t-esc="c.oil_price"></p></center></td>
+                                            <td><center><p t-esc="c.washing_charge"></p></center></td>
+                                            <td><center><p t-esc="c.cost_total"></p></center></td>
+                                            <p t-set="total_sum" t-value="total_sum + c.cost_total"></p>
+                                        </tr>
+                                    </t>
+                                        <tr>
+                                            <td colspan="5"><center>Total Cost</center></td>
+                                            <td><center><p t-esc="total_sum"></p></center></td>
+                                        </tr>
+                                      
+                                </table>
+                            </center>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

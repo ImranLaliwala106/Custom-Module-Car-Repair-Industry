@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_filter_report_car_repair" model="ir.actions.report">
+            <field name="name">Car Repair Filter</field>
+            <field name="model">car.repair.industry.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">car_repair_industry.report_car_repair_filter</field>
+            <field name="report_file">car_repair_industry.report_car_repair_filter</field>
+            <field name="binding_model_id" ref="model_car_repair_industry_wizard" />
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_car_repair_filter">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="pt">
+                        <div class="oe_structure" style="font-size:10px; font-family:TimeNewRoman;">
+                            <h2 style="text-align:center;">Car Repair Industry</h2>
+                            <t t-if="pt">
+                                <table class="table table-condensed" style="border:black;">
+                                    <tr style="background-color:Grey;">
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                    </tr>
+                                    <tr style="height:20px;text-align:center;">
+                                        <td>
+                                            <span t-if="pt.start_date" t-field="pt.start_date" />
+                                            <span t-if="not pt.start_date">N/A</span>
+                                        </td>
+                                        <td>
+                                            <span t-if="pt.end_date" t-field="pt.end_date" />
+                                            <span t-if="not pt.end_date">N/A</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+                                <t t-set="total_sum" t-value="0.0"/>
+                                <t t-set="record_total" t-value="0.0"/> 
+                                <t t-foreach="pt.record_ids" t-as="o">
+                                    <table class="table table-condensed" style="border:black;">
+                                        <tr style="background-color:aqua;height:20px;">
+                                            <th style="width:15%;">Client Name</th>
+                                            <th style="width:15%;">Phone</th>
+                                            <th style="width:20%;">Email</th>
+                                            <th>Car Model</th>
+                                            <th style="width:10%;">Total Cost</th>
+                                        </tr>
+        
+                                        <t t-foreach="o.car_details_ids" t-as="c">
+                                            <tr style="height:20px;text-align:center;">
+                                                <td>
+                                                    <span t-field="o.client_name"></span>
+                                                </td>
+                                                <td>
+                                                    <span t-field="o.contact_number"></span>
+                                                </td>
+                                                <td>
+                                                    <span t-field="o.email"></span>
+                                                </td>
+                                                <td>
+                                                    <span t-field="c.car"></span>
+                                                </td>
+                                                <td>
+                                                    <span t-field="c.cost_total"></span>
+                                                </td>
+                                                
+
+                                                <p t-set="total_sum" t-value="total_sum + c.cost_total"></p>
+
+                                            </tr>
+                                            
+                                        </t>
+                                        <td colspan="4"><center><b>Total</b></center></td>
+                                        <td><center><span t-field="o.subtotal"></span></center></td>
+                                    </table>
+                                </t>
+                                
+                                <table class="table table-condensed" style="border:black;">
+                                    <tr style="background-color:grey;">
+                                        <td><center><b>Total Cost</b></center></td>
+                                        <td style="width:10%;"><center><b><p t-esc="total_sum"></p></b></center></td>
+                                    </tr>
+                                </table>
+                            </t>
+                            <t t-else="">
+                                <p>No patient data found.</p>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+        
+    </data>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <record id="car_repair_reminder_mail" model="mail.template">
+            <field name="name">Car Repair: Reminder Email</field>
+            <field name="model_id" ref="car_repair_industry.model_car_repair_industry"/>
+            <field name="email_from">{{ object.login_company.email }}</field>
+            <field name="subject">REMINDER EMAIL</field>
+            <field name="email_to">{{object.email}}</field>
+            <field name="description">Sent to customers whose car service is due</field>
+            <field name="body_html" type="html">
+                <p>
+                    Hello, <b><span t-field="object.client_name"></span></b><br/><br/>
+
+                    This is a reminder mail that your car service is due.
+                </p>
+            </field>
+        </record>    
+
+    </data>
+</odoo>

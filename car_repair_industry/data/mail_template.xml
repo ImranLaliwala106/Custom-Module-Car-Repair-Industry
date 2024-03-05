@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <record id="email_template_car_repair_new" model="mail.template">
+            <field name="name">Car Repair: Send Email</field>
+            <field name="model_id" ref="car_repair_industry.model_car_repair_industry"/>
+            <field name="email_from">{{ object.login_company.email }}</field>
+            <field name="subject">QUOTATION EMAIL</field>
+            <field name="email_to">{{object.email}}
+                {{',' + ','.join(follower.partner_id.email for follower in object.message_follower_ids)}}
+            </field>
+            <field name="report_template_ids" eval="[(4, ref('car_repair_industry.action_report_car_repair'))]"/>
+            <field name="description">Sent to customers with their invoices in attachment</field>
+            <field name="body_html" type="html">
+                <p>
+                    Hello, <b><span t-field="object.client_name"></span></b><br/><br/>
+
+                    Here is the quotation of <b><span t-field="object.sr_no"></span></b> amounting <b><span t-field="object.subtotal"></span></b> for your car.
+                </p>
+            </field>
+        </record>    
+
+    </data>
+</odoo>
