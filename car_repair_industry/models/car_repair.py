@@ -38,7 +38,7 @@ class CarRepairDetails(models.Model):
     # TO ADD DRAG OPTION IN CALENDAR VIEW
     duration = fields.Float()
     image = fields.Binary(string="Images")
-    status = fields.Selection(string="Status",readonly=True,default="received", tracking=True, selection=
+    status = fields.Selection(string="Status",readonly=True, tracking=True, selection=
                               [('received','RECEIVED'),
                                ('in_diagnosis','IN DIAGNOSIS'),
                                ('quotation_sent','QUOTATION SENT'),
@@ -72,7 +72,14 @@ class CarRepairDetails(models.Model):
                 vals['sr_no'] = self.env['ir.sequence'].next_by_code('car.repair.industry.sequence') or _('New')
         res = super(CarRepairDetails, self).create(vals)
         return res
-          
+    
+    def default_get(self, fields):
+        res = super(CarRepairDetails,self).default_get(fields)
+        res['status'] = 'received'
+        res['assigned_to'] = 'A'
+        res['priority'] = 'normal'
+        return res
+    
     # OVERRIDE UNLINK METHOD TO DELETE RECORDS THAT ARE NOT IN DONE STATE
     def unlink(self):
             done_records = self.filtered(lambda x: x.status == 'done')
