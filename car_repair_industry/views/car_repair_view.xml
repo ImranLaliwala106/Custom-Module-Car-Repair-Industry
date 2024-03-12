@@ -9,12 +9,12 @@
                 <search string="Car Search">
                     <field name="sr_no"></field>
                     <field name="subject"></field>
-                    <field name="assigned_to"></field>
+                    <field name="client_name"></field>
                     <field name="priority" widget="priority"></field>
                     <field name="date_reciept"></field>
                     <field name="status"></field>
-                    <field name="mobile"></field>
-                    <field name="email" filter_domain="['|',('mobile','ilike','self'),('email','ilike','self')]"></field>
+                    <field name="phone"></field>
+                    <field name="email"></field>
                     <separator/>
                     <filter string="Received" name="received" domain="[('status','=','received')]"></filter>
                     <filter string="In Diagnosis" name="in_diagnosis" domain="[('status','=','in_diagnosis')]"></filter>
@@ -61,16 +61,15 @@
                 <form string="Car Repair Form">
                     <!-- OBJECT BUTTONS -->
                     <header>
-                        <button name="create_car_diagnosis" string="CREATE CAR DIAGNOSIS" type="object" class="oe_highlight"></button>
-                        <button name="print_receipt" string="PRINT RECEIPT" type="object"></button>
-                        <button name="print_excel" string="PRINT EXCEL REPORT" type="object"></button>
-                        <button name="action_send_email" string="Send Email" type="object" class="oe_highlight" invisible ="status in ('received','quotation_sent','quotation_approved','work_in_progress','done')"></button>
+                        <button name="do_diagnosis" string="CREATE CAR DIAGNOSIS" type="object" class="oe_highlight" groups="car_repair_industry.admin_group" invisible ="status in ('in_diagnosis','quotation_sent','quotation_approved','work_in_progress','done')"></button>
+                        <button name="do_quotation" string="SEND QUOTATION" type="object" class="oe_highlight" groups="car_repair_industry.admin_group" invisible ="status in ('quotation_sent','received','quotation_approved','work_in_progress','done')"></button>
+                        <button name="do_quotation_approved" string="APPROVE QUOTATION" type="object" groups="car_repair_industry.admin_group" class="oe_highlight" invisible ="status in ('in_diagnosis','quotation_approved','received','work_in_progress','done')"></button>
+                        <button name="do_work_in_progress" string="WORK IN PROGRESS" type="object" groups="car_repair_industry.admin_group" class="oe_highlight" invisible ="status in ('in_diagnosis','quotation_sent','work_in_progress','received','done')"></button>
+                        <button name="do_done" string="DONE" type="object" class="oe_highlight" groups="car_repair_industry.admin_group" invisible ="status in ('in_diagnosis','quotation_sent','quotation_approved','done','received')"></button>
+                        <button name="print_receipt" string="PRINT RECEIPT" type="object" invisible ="status in ('in_diagnosis','received')"></button>
+                        <button name="print_excel" string="PRINT EXCEL REPORT" type="object" invisible ="status in ('in_diagnosis','received')"></button>
+                        <button name="action_send_email" string="Send Email" type="object" class="oe_highlight" groups="car_repair_industry.admin_group" invisible ="status in ('received','quotation_sent','quotation_approved','work_in_progress','done')"></button>
                         <field name="status" widget="statusbar"></field>
-                        <button name="do_diagnosis" string="Diagnosis" type="object" class="oe_highlight" invisible ="status in ('in_diagnosis','quotation_sent','quotation_approved','work_in_progress','done')"></button>
-                        <button name="do_quotation" string="Send Quotation" type="object" class="oe_highlight" invisible ="status in ('quotation_sent','received','quotation_approved','work_in_progress','done')"></button>
-                        <button name="do_quotation_approved" string="Approve Quotation" type="object" class="oe_highlight" invisible ="status in ('in_diagnosis','quotation_approved','received','work_in_progress','done')"></button>
-                        <button name="do_work_in_progress" string="Work in  Progress" type="object" class="oe_highlight" invisible ="status in ('in_diagnosis','quotation_sent','work_in_progress','received','done')"></button>
-                        <button name="do_done" string="Done" type="object" class="oe_highlight" invisible ="status in ('in_diagnosis','quotation_sent','quotation_approved','done','received')"></button>
                     </header>
                     <sheet>
                         <h1>
@@ -80,6 +79,8 @@
                             <group>
                                 <field name="subject"></field>
                                 <field name="assigned_to"></field>
+                                <field name="make_editable" invisible="1"></field>
+                                <field name="editable_bool" invisible="make_editable == False" groups="car_repair_industry.admin_group"></field>
                             </group>
                             <group>
                                 <field name="priority" widget="priority" class="mr-3"></field>
@@ -118,7 +119,6 @@
                                         <p><b>CAR INFO</b></p>
                                         <field name="car_details_ids" widget="many2many"></field>
                                     </group>
-                                    <field name="subtotal" string="Total Cost"></field>
                                 </sheet>
                             </page>
                             <page string="Service Repair Checklist"></page>
@@ -187,7 +187,7 @@
                     <field name="assigned_to"></field>
                     <field name="priority" widget="priority"></field>
                     <field name="date_reciept"></field>
-                    <field name="status" invisible="1" filters="1"></field>
+                    <field name="status" filters="1"></field>
                 </calendar>
             </field>
         </record>
@@ -198,8 +198,6 @@
             <field name="model">car.repair.industry</field>
             <field name="arch" type="xml">
                 <activity string="Car Repair">
-                    <field name="sr_no"></field>
-                    <field name="car_details_ids"></field>
                     <templates>
                         <div t-name="activity-box">
                             <field name="sr_no" display="full"></field>                                
@@ -228,22 +226,12 @@
             <field name="arch" type="xml">
                 <graph string="Car Repair graph" stacked="True">
                     <field name="sr_no" type="row"></field>
-                    <!-- <field name="subtotal"></field> -->
                 </graph>
             </field>
         </record>
 
-        <record model="ir.actions.server" id="action_print_record">
-            <field name="name">Print Records</field>
-            <field name="model_id" ref="car_repair_industry.model_car_repair_industry"/>
-            <field name="state">code</field>
-            <field name="code">
-                model.open_wizard()
-            </field>
-        </record> 
-
         <record id="car_repair_action_id" model="ir.actions.act_window">
-            <field name="name">Car Repair</field>
+            <field name="name">Car Repair Industry</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">car.repair.industry</field>
             <field name="view_mode">tree,form,kanban,calendar,search,activity,pivot,graph</field>
@@ -264,13 +252,9 @@
             </field>
         </record>
 
-        <menuitem id="car_repair_main_menu_id" name="Car Repair"></menuitem>
-        <menuitem id="car_repair_sub_menu_id" name="Car Repair" parent="car_repair_main_menu_id" action="car_repair_action_id"></menuitem>
+        <menuitem id="car_repair_main_menu_id" name="Car Repair Industry" action="car_repair_action_id"></menuitem>
+        <menuitem id="car_repair_sub_menu_id" name="Car Repair" parent="car_repair_main_menu_id" action="car_repair_action_id" sequence="0"></menuitem>
         <menuitem id="vehicle_repair_sub_menu_id" name="Vehicle Repair" parent="car_repair_sub_menu_id" action="car_repair_action_id"></menuitem>
-        
-        <menuitem id="billing_sub_menu_id" name="Billing" parent="car_repair_main_menu_id" action="car_repair_action_id"></menuitem>
-        <menuitem id="clients_sub_menu_id" name="Clients" parent="car_repair_main_menu_id" action="car_repair_action_id" groups="client_group"></menuitem>
-        <menuitem id="mechanics_sub_menu_id" name="Mechanics" parent="car_repair_main_menu_id" action="car_repair_action_id" groups="mechanics_group"></menuitem>
-        <menuitem id="owners_sub_menu_id" name="Owners" parent="car_repair_main_menu_id" action="car_repair_action_id" groups="owners_group"></menuitem>
+        <menuitem id="billing_sub_menu_id" name="Billing" parent="car_repair_main_menu_id" action="car_repair_action_id" sequence="1"></menuitem>
     </data>
 </odoo>

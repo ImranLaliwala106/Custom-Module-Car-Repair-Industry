@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.car_repair</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Car Repair Industry" id="car_repair_setttings" name="car_repair_industry" string="Car Repair Industry" groups="car_repair_industry.admin_group">
+                    <block title="Car Repair Industry" id="end_contract_setting">
+                        <setting string="Car Repair Industry">
+                            <div class="text-muted content-group mt16">
+                                <span>Edit by Admin </span>
+                                <field name="check_bool" class="text-center" style="width: 10%; min-width: 4rem;" />
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="car_repair_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'car_repair_industry', 'bin_size': False}</field>
+    </record>
+
+    <menuitem
+        id="car_repair_config_settings_menu"
+        name="Settings"
+        parent="car_repair_main_menu_id"
+        sequence="2"
+        action="car_repair_config_settings"
+        groups="base.group_system" />
+</odoo>

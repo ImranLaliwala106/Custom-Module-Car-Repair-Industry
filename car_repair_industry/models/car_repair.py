@@ -3,6 +3,7 @@ from odoo.exceptions import ValidationError
 from datetime import datetime,timedelta
 import xlwt,base64
 from io import BytesIO
+from odoo.addons.base.models import ir_actions
 
 
 class CustomExcel(models.TransientModel):
@@ -15,25 +16,26 @@ class CustomExcel(models.TransientModel):
     
 class CarRepairDetails(models.Model):
     _name = "car.repair.industry"
-    _description = "Car Repair"
+    _description = "Car Repair Industry"
     _rec_name = 'subject'
     _order = 'priority desc'
     _inherit = ['mail.thread','mail.activity.mixin']
     _check_company_auto = True
 
     company_id = fields.Many2one('res.company',string="Company ID",default=lambda self: self.env.company)
-    # other_company_id = fields.Many2one('res.company', check_company=True, default=lambda self: _('New'))
     sr_no = fields.Char(readonly=True, index=True, copy=False, default=lambda self: _('New'))
     subject = fields.Char(string="Subject", size=200)
     assigned_to = fields.Selection(string="Assigned to",
                                    selection=[('A','Albert'),('B',"Brian"),('C','Carl'),('D','David')])
+    make_editable = fields.Boolean(related="company_id.check_bool", string="Check to make uneditable")
+    editable_bool = fields.Boolean(string="Make Uneditable")
     priority = fields.Selection(string="Priority",
                                 selection=[('low','Low'),
                                            ('normal','Normal'),
                                            ('high','High'),
                                            ('very_high','Very High')])
-    # TO SET TODAY DATE BY DEFAULT
-    date_reciept = fields.Date(string="Date of Receipt",default=lambda x: fields.Date.context_today(x))
+    # TO SET TODAY DATE BY DEFAULt
+    date_reciept = fields.Date(string="Date of Receipt", default=lambda x: fields.Date.context_today(x))
     to_date = fields.Date(string="End date")
     # TO ADD DRAG OPTION IN CALENDAR VIEW
     duration = fields.Float()
@@ -82,10 +84,10 @@ class CarRepairDetails(models.Model):
     
     # OVERRIDE UNLINK METHOD TO DELETE RECORDS THAT ARE NOT IN DONE STATE
     def unlink(self):
-            done_records = self.filtered(lambda x: x.status == 'done')
-            if done_records:
-                raise ValidationError("Record in done stage cannot be deleted")
-            return super(CarRepairDetails, self-done_records).unlink()          
+        done_records = self.filtered(lambda x: x.status == 'done')
+        if done_records:
+            raise ValidationError("Record in done stage cannot be deleted")
+        return super(CarRepairDetails, self-done_records).unlink()          
     
     # SUM OF SELECTED CARS
     @api.depends('car_details_ids.cost_total')
@@ -95,9 +97,6 @@ class CarRepairDetails(models.Model):
             record.subtotal = total
         
     # OBJECT BUTTONS
-    def create_car_diagnosis(self):
-        print("Car diagnosis created")
-        
     def print_receipt(self):
         print("Receipt printed")
     
@@ -250,4 +249,17 @@ class CarRepairDetails(models.Model):
                 }
                 template = self.env['mail.template'].browse(template_id.id)
                 template.with_context(ctx).send_mail(self.id, force_send=True)
+    
+    def write(self, vals):
+        make_editable = vals.get('make_editable', self.make_editable)
+        editable_bool = vals.get('editable_bool', self.editable_bool)
 
+        if make_editable:
+            if 'editable_bool' in vals:
+                editable_bool = vals['editable_bool']
+
+            if editable_bool:
+                excluded_field = [field for field in vals if field != 'editable_bool']
+                if excluded_field:
+                    raise ValidationError("You cannot update record")
+        return super(CarRepairDetails, self).write(vals)

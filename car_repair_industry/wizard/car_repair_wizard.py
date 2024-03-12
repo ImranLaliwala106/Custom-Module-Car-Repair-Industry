@@ -119,6 +119,7 @@ class CarRepairWizard(models.TransientModel):
             'type': 'ir.actions.act_window',
         }
 
+
     
     
     

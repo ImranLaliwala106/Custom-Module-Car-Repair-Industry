@@ -16,6 +16,7 @@
             <t t-call="web.basic_layout">
                 <div class="page">
                     <t t-foreach="docs" t-as="pt">
+                        <t t-call="web.external_layout">
                         <div class="oe_structure" style="font-size:10px; font-family:TimeNewRoman;">
                             <h2 style="text-align:center;">Car Repair Industry</h2>
                             <t t-if="pt">
@@ -88,6 +89,7 @@
                                 <p>No patient data found.</p>
                             </t>
                         </div>
+                    </t>
                     </t>
                 </div>
             </t>

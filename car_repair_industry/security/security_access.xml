@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="car_repair_owners_access" model="ir.rule">
-        <field name="name">Owners Rules</field>
-        <field name="model_id" ref="model_car_repair_industry"/>
-        <field name="domain_force">[(1, '=', 1)]</field>
-        <field name="groups" eval="[(4, ref('car_repair_industry.owners_group'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_unlink" eval="True"/>
-    </record>
-
     <record id="car_repair_clients_access" model="ir.rule">
-        <field name="name">Clients Rules</field>
+        <field name="name">car_repair_clients_access</field>
         <field name="model_id" ref="model_car_repair_industry"/>
         <field name="domain_force">[('client_name', '=', user.id)]</field>
         <field name="groups" eval="[(4, ref('car_repair_industry.client_group'))]"/>
         <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="car_repair_superviser_access" model="ir.rule">
+        <field name="name">car_repair_superviser_access</field>
+        <field name="model_id" ref="model_car_repair_industry"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('car_repair_industry.superviser_group'))]"/>
+        <field name="perm_read" eval="True"/>
         <field name="perm_write" eval="False"/>
         <field name="perm_create" eval="False"/>
         <field name="perm_unlink" eval="False"/>
+    </record>
+    
+    <record id="car_repair_admin_access" model="ir.rule">
+        <field name="name">car_repair_admin_access</field>
+        <field name="model_id" ref="model_car_repair_industry"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('car_repair_industry.admin_group'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
     </record>
 
 </odoo>
